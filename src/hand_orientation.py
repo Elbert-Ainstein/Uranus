@@ -1,17 +1,13 @@
-"""Uses interpolation in Leap API to determine the location of hands based on 
-previous data. We use the LatestEventListener to wait until we have tracking 
-events. We delay by 0.02 seconds each frame to simulate some delay, we get a 
-frame size of the frame closest to the time we want to interpolate from and 
-then interpolate on that frame"""
-import leap
 import time
+import leap
+from leap import datatypes as dt
 from timeit import default_timer as timer
 from typing import Callable
 from leap.events import TrackingEvent
 from leap.event_listener import LatestEventListener
 from leap.datatypes import FrameData
 
-
+## A small timeout & adds condition to get sensor working first
 def wait_until(condition: Callable[[], bool], timeout: float = 5, poll_delay: float = 0.01):
     start_time = timer()
     while timer() - start_time < timeout:
@@ -19,30 +15,31 @@ def wait_until(condition: Callable[[], bool], timeout: float = 5, poll_delay: fl
             return True
         time.sleep(poll_delay)
     if not condition():
-        return False
-
-
+        return False    
+    
 def main():
-    tracking_listening = LatestEventListener(leap.EventType.Tracking)
+    ## Add Tracking event
+    listening = LatestEventListener(leap.EventType.Tracking)
 
     connection = leap.Connection()
-    connection.add_listener(tracking_listening)
+    connection.add_listener(listening)
 
     with connection.open() as open_connection:
-        wait_until(lambda: tracking_listening.event is not None)
-        # ctr-c to exit
+        ## uses the wait_until() to make sure sensor is working
+        wait_until(lambda: listening.event is not None)
+
+        ## ctrl c to exit
         while True:
-            event = tracking_listening.event
+            event = listening.event
             if event is None:
                 continue
-            event_timestamp = event.timestamp
-
+            
             target_frame_size = leap.ffi.new("uint64_t*")
             frame_time = leap.ffi.new("int64_t*")
-            frame_time[0] = event_timestamp
+            frame_time[0] = event.timestamp
 
-            # simulate 20 ms delay
-            time.sleep(0.02)
+            ## a delay of 0.3 seconds
+            time.sleep(0.3)
 
             try:
                 # we need to query the storage required for our interpolation
@@ -61,7 +58,7 @@ def main():
                 # get close to real time hand tracking with interpolation
                 leap.interpolate_frame(
                     open_connection,
-                    event_timestamp + 30000,
+                    event.timestamp + 30000,
                     frame_data.frame_ptr(),
                     target_frame_size[0],
                 )
@@ -81,9 +78,11 @@ def main():
             for hand in event.hands:
                 hand_type = "left" if str(hand.type) == "HandType.Left" else "right"
                 print(
-                    f"Hand id {hand.id} is a {hand_type} hand with position ({hand.palm.position.x}, {hand.palm.position.y}, {hand.palm.position.z})."
+                    f"Palm Orientation of {hand_type} hand: x:{hand.palm.orientation.x}, y: {hand.palm.orientation.y}, z: {hand.palm.orientation.z}, w: {hand.palm.orientation.w}"
                 )
-
 
 if __name__ == "__main__":
     main()
+                
+
+
