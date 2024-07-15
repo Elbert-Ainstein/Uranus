@@ -6,6 +6,7 @@ from typing import Callable
 from leap.events import TrackingEvent
 from leap.event_listener import LatestEventListener
 from leap.datatypes import FrameData
+from components.plot_vector import plot_vector
 
 ## A small timeout & adds condition to get sensor working first
 def wait_until(condition: Callable[[], bool], timeout: float = 5, poll_delay: float = 0.01):
@@ -78,8 +79,11 @@ def main():
             for hand in event.hands:
                 hand_type = "left" if str(hand.type) == "HandType.Left" else "right"
                 print(
-                    f"Palm Orientation of {hand_type} hand: x:{hand.palm.orientation.x}, y: {hand.palm.orientation.y}, z: {hand.palm.orientation.z}, w: {hand.palm.orientation.w}"
+                    f"Palm Rotation of {hand_type} hand: {hand.palm.normal.x}, {hand.palm.normal.y}, {hand.palm.normal.z}"
                 )
+                plot_vector(hand.palm.normal)
+
+
 
 if __name__ == "__main__":
     main()
