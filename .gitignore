@@ -4,7 +4,7 @@ venv/
 build/
 src/components/__pycache__
 examples/
-
+.vscode/
 
 leapc-python-api/build
 leapc-python-api/dist
