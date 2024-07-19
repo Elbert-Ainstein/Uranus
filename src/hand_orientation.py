@@ -1,22 +1,11 @@
 import time
 import leap
-from leap import datatypes as dt
-from timeit import default_timer as timer
-from typing import Callable
 from leap.events import TrackingEvent
 from leap.event_listener import LatestEventListener
 from leap.datatypes import FrameData
 from components.plot_vector import plot_vector
-
-## A small timeout & adds condition to get sensor working first
-def wait_until(condition: Callable[[], bool], timeout: float = 5, poll_delay: float = 0.01):
-    start_time = timer()
-    while timer() - start_time < timeout:
-        if condition():
-            return True
-        time.sleep(poll_delay)
-    if not condition():
-        return False    
+from components.wait_until import wait_until
+ 
     
 def main():
     ## Add Tracking event
