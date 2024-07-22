@@ -77,7 +77,8 @@ void moveMotor(int conInA, int conInB, int conInC, int conInD, int joyStickXpin,
     X = constrain(analogRead(joyStickXpin), 5, 1000);
     Y = constrain(analogRead(joyStickYpin), 5, 1000);
     
-    Serial.print("X: "); Serial.print(X); Serial.print(" Y: "); Serial.println(Y);
+    // Serial.print("X: "); Serial.print(X); Serial.print(" Y: "); Serial.println(Y);
+    //Serial.print("Pot A:"); Serial.print(potA); Serial.print("Pot B:"); Serial.print(potB); Serial.print("Pot C:"); Serial.print(potC); Serial.print("Pot D:"); Serial.println(potD);
     //delay(50);
     
 
@@ -118,6 +119,7 @@ void moveMotor(int conInA, int conInB, int conInC, int conInD, int joyStickXpin,
     // D -> SHAFT ROTATION
     pWideD = map(potD, 0, 1023, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH);
     pWidthD = int(float(pWideD) / 1000000 * FREQUENCY * 4096);
+    Serial.print("pWidthD: "); Serial.println(pWidthD);
     
     
     pwm.setPWM(motD, 0, pWidthD);
