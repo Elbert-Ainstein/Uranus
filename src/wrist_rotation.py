@@ -12,7 +12,7 @@ def vector_to_deg(quat: dt.Quaternion):
     angle_x = quat.x / math.sin(math.acos(theta))
     angle_y = quat.y / math.sin(math.acos(theta)) 
     angle_z = quat.z / math.sin(math.acos(theta))
-    print(f"{angle_x}, {angle_y}, {angle_z}")
+    print(f"angle x: {angle_x}, angle y: {angle_y}, angle z: {angle_z}")
 
 def wrist_rotation():
     ## Add Tracking event
@@ -74,9 +74,9 @@ def wrist_rotation():
 
             for hand in event.hands:
                 hand_type = "left" if str(hand.type) == "HandType.Left" else "right"
-                print(
-                    f"{hand.arm.rotation.x}, {hand.arm.rotation.y}, {hand.arm.rotation.z}, {hand.arm.rotation.w}"
-                )
+                # print(
+                #     f"{hand.arm.rotation.x}, {hand.arm.rotation.y}, {hand.arm.rotation.z}, {hand.arm.rotation.w}"
+                # )
                 vector_to_deg(hand.arm.rotation)
              
 def main():

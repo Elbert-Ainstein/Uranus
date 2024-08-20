@@ -1,3 +1,6 @@
+
+// FILE TO 
+
 #include <Wire.h> // Include Wire Library for I2C Communications
 #include <Adafruit_PWMServoDriver.h> // Include Adafruit PWM Library
 
@@ -5,7 +8,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
  
 #define MIN_PULSE_WIDTH 650
 #define MAX_PULSE_WIDTH 2350
-#define FREQUENCY       60
+#define FREQUENCY       50
 #define SERVOMIN        150 // length?
 #define SERVOHALF       375 // length?
 #define SERVOMAX        600 // length?
@@ -38,6 +41,7 @@ int deadzone = 10; // deadzone
 
 void setup() {
     pwm.begin();
+    pwm.setOscillatorFrequency(27000000);
     pwm.setPWMFreq(FREQUENCY);
     Serial.begin(9600);
     pinMode(analogInPin, INPUT);
@@ -50,6 +54,7 @@ void setup() {
     delay(10);
 }
 
+// Most of the time works, but today it jerks off and makes rotors fail. 
 void calibrate(){
     int sDelay = 100;
     int lDelay = 150;
@@ -88,6 +93,10 @@ void moveMotor(int conInA, int conInB, int conInC, int conInD, int joyStickXpin,
     int halfFlexion, remappedPotC;
     int F1, F2; // Flexion Variables
     
+
+    // SECTION BELOW DOES NOT WORK
+
+
     // A -> ABDUCTION
     pWideA = map(potA, 0, 1023, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH);
     pWidthA = int(float(pWideA) / 1000000 * FREQUENCY * 4096);
@@ -119,13 +128,18 @@ void moveMotor(int conInA, int conInB, int conInC, int conInD, int joyStickXpin,
     // D -> SHAFT ROTATION
     pWideD = map(potD, 0, 1023, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH);
     pWidthD = int(float(pWideD) / 1000000 * FREQUENCY * 4096);
-    Serial.print("pWidthD: "); Serial.println(pWidthD);
+
+    // Serial.print("pWidthA: "); Serial.print(pWidthA);
+    // Serial.print("pWidthB: "); Serial.print(pWidthB);
+    // Serial.print("pWidthC: "); Serial.print(pWidthC);
+    // Serial.print("pWidthD: "); Serial.println(pWidthD);
+    Serial.print("potA: "); Serial.print(potA);Serial.print(" potD: "); Serial.println(potD);
     
     
-    pwm.setPWM(motD, 0, pWidthD);
-    pwm.setPWM(motA, 0, pWidthA);
-    pwm.setPWM(motB, 0, pWidthB);
-    pwm.setPWM(motC, 0, pWidthC);
+    // pwm.setPWM(motA, 0, pWidthA);
+    // pwm.setPWM(motB, 0, pWidthB);
+    // pwm.setPWM(motC, 0, pWidthC);
+    // pwm.setPWM(motD, 0, pWidthD);
     delay(50);
   
 }

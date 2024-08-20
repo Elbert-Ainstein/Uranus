@@ -1,6 +1,11 @@
 import time
 import leap
 from leap import datatypes as dt
+import serial
+
+# finding arduino 
+arduino = serial.Serial(port="COM5", baudrate=115200, timeout=0.1)
+
 
 def sub_vectors(v1: dt.Vector, v2: dt.Vector) -> list:
     return map(float.__sub__, v1, v2)
