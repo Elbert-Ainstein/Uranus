@@ -1,11 +1,8 @@
 import time
 import leap
 from leap import datatypes as dt
+from components.write_read import write_read
 import serial
-
-# finding arduino 
-arduino = serial.Serial(port="COM5", baudrate=115200, timeout=0.1)
-
 
 def sub_vectors(v1: dt.Vector, v2: dt.Vector) -> list:
     return map(float.__sub__, v1, v2)
@@ -34,9 +31,14 @@ class PinchingListener(leap.Listener):
                 pinching, array = fingers_pinching(thumb, index)
                 pinching_str = "not pinching" if not pinching else "" + str("pinching")
                 
-                print(
-                    f"{hand_type} hand thumb and index {pinching_str} with position diff ({array[0]}, {array[1]}, {array[2]})."
-                )
+                # print(
+                #     f"{hand_type} hand thumb and index {pinching_str} with position diff ({array[0]}, {array[1]}, {array[2]})."
+                # )
+                # print("")
+
+                write_read(f"{hand_type} hand thumb and index {pinching_str} with position diff ({array[0]}, {array[1]}, {array[2]}).")
+
+
 
 def main():
     listener = PinchingListener()
