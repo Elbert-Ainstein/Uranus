@@ -7,7 +7,7 @@ from components.plot_vector import plot_vector
 from components.wait_until import wait_until
  
     
-def main():
+def hand_orientation():
     ## Add Tracking event
     listening = LatestEventListener(leap.EventType.Tracking)
 
@@ -74,8 +74,7 @@ def main():
 
 
 
-if __name__ == "__main__":
-    main()
+
                 
 
 

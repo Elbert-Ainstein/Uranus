@@ -74,9 +74,9 @@ def wrist_rotation():
 
             for hand in event.hands:
                 hand_type = "left" if str(hand.type) == "HandType.Left" else "right"
-                # print(
-                #     f"{hand.arm.rotation.x}, {hand.arm.rotation.y}, {hand.arm.rotation.z}, {hand.arm.rotation.w}"
-                # )
+                print(
+                    f"{hand.arm.rotation.x}, {hand.arm.rotation.y}, {hand.arm.rotation.z}, {hand.arm.rotation.w}"
+                )
                 vector_to_deg(hand.arm.rotation)
              
 def main():
